@@ -3,6 +3,11 @@ package com.example.demo.perficient.dto;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -13,9 +18,18 @@ public class Contact {
 	@Id
 	@GeneratedValue
 	Long id;
+	
+	@NotNull
+	@NotBlank(message = "first name is required")
+	@Size(min=2, max=30, message="El nombre debe tener entre {min} y {max} caracteres")
 	String firstName;
+	
 	String lastName;
+	
+	@Pattern(regexp="^\\+[0-9]*$", message="El número de telefono sólo puede tener dígitos iniciando con el símbolo +")
 	String phoneNumber;
+	
+	@Email(message ="Email inválido")
 	String email;
 	
 	public Contact(){

@@ -3,6 +3,7 @@ package com.example.demo.perficient.api;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +20,7 @@ public class ContactsApi {
 	ContactService contactService;
 	     
 	    @PostMapping(value="/contact")
-	    public Contact save(@RequestBody Contact contact){
+	    public Contact save(@Validated @RequestBody Contact contact){
 	    	
 	        return contactService.save(contact);
 	    }
