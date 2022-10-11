@@ -16,6 +16,7 @@ public class ContactService {
      
     
     public Contact save(Contact contact){
+        //return dao.saveAndFlush( new Contact("Pedro" , "Fredy", "+455667", "emailtest.com"));
         return dao.saveAndFlush(contact);
     }
     

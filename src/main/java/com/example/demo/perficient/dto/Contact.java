@@ -21,7 +21,7 @@ public class Contact {
 	
 	@NotNull
 	@NotBlank(message = "first name is required")
-	@Size(min=2, max=30, message="El nombre debe tener entre {min} y {max} caracteres")
+	@Size(min=3, max=30, message="El nombre debe tener entre {min} y {max} caracteres")
 	String firstName;
 	
 	String lastName;
@@ -38,6 +38,13 @@ public class Contact {
 
 	public Contact(long l, String firstName, String lastName, String phoneNumber, String email) {
 		setId(l);
+		setFirstName(firstName);
+		setLastName(lastName);
+		setPhoneNumber(phoneNumber);
+		setEmail(email);
+	}
+
+	public Contact( String firstName, String lastName, String phoneNumber, String email) {
 		setFirstName(firstName);
 		setLastName(lastName);
 		setPhoneNumber(phoneNumber);
