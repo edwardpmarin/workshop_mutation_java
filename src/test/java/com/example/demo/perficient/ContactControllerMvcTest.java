@@ -11,8 +11,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -30,20 +32,65 @@ public class ContactControllerMvcTest {
 
     @Test
     void whenValidInput_thenReturns200() throws Exception {
-        mockMvc.perform(post("/contact")
-                .contentType("application/json")
-                .content(asJsonString(new Contact("Dairo", "Quintero", "+57302336789", "dairo.test@gmail.com"))))
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/contact")
+                        .contentType("application/json")
+                        .content(asJsonString(new Contact("Dairo", "Quintero", "+57302336789", "dairo.test@gmail.com"))))
                 .andExpect(status().isOk());
     }
 
     @Test
     void whenInValidEmail_thenReturns400() throws Exception {
         mockMvc.perform(post("/contact")
-                .contentType("application/json")
-                .content(asJsonString(new Contact("Dairo", "Quintero", "+57302336789", "dairo.testgmail.com"))))
+                        .contentType("application/json")
+                        .content(asJsonString(new Contact("Dairo", "Quintero", "+57302336789", "dairo.testgmail.com"))))
                 .andExpect(status().isBadRequest());
     }
 
+    @Test
+    void whenInValiFirstName_thenReturns400() throws Exception {
+        mockMvc.perform(post("/contact")
+                        .contentType("application/json")
+                        .content(asJsonString(new Contact("Da", "Quintero", "+57302336789", "dairo.test@gmail.com"))))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void whenInValidPhoneNumber_thenReturns400() throws Exception {
+        mockMvc.perform(post("/contact")
+                        .contentType("application/json")
+                        .content(asJsonString(new Contact("Da", "Quintero", "302336789as", "dairo.test@gmail.com"))))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void whenValidEmail_GetByid() throws Exception {
+
+        mockMvc.perform(get("/contact/id")
+                        .contentType("application/json")
+                        .content(asJsonString(new Contact(5))))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void whenGetByNameBodyNull() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/contact/name")
+                        .contentType("application/json")
+                        .content(asJsonString(null)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void whenGetByIdBodyNull() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/contact/id")
+                        .contentType("application/json")
+                        .content(asJsonString(null)))
+                .andExpect(status().isBadRequest());
+    }
 
     public static String asJsonString(final Object obj) {
         try {

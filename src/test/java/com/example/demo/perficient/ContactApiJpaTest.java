@@ -2,6 +2,8 @@ package com.example.demo.perficient;
 
 import com.example.demo.perficient.dao.ContactRepository;
 import com.example.demo.perficient.dto.Contact;
+import com.example.demo.perficient.service.ContactService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -26,14 +28,18 @@ public class ContactApiJpaTest {
 
     @Autowired
     ContactRepository contactRepository;
+    private ContactService contactService;
+
+    @BeforeEach
+    void setUp() {
+        contactService = new ContactService(contactRepository);
+    }
 
     @ExceptionHandler(ConstraintViolationException.class)
     @Test
-    public void saveTestCorrectValues(){
+    public void saveTestCorrectValues() {
         Contact contact_request = new Contact("Dairo", "Quintero", "+57302336789", "dairo.test@gmail.com");
-        Contact contact_response = new Contact();
-        contact_request = entityManager.persistAndFlush(contact_request);
-        contact_response = contactRepository.save(contact_request);
+        Contact contact_response = contactService.save(contact_request);
         assertThat(contact_response.getId()).isNotNull();
     }
 
@@ -41,8 +47,7 @@ public class ContactApiJpaTest {
     @Test
     public void saveEmailInvalidTest() {
         Contact contact_request = new Contact("Dairo", "Quintero", "+57302336789", "dairo.testgmail.com");
-        Contact contact_response = new Contact();
-        Exception exception = assertThrows(ConstraintViolationException.class, () -> entityManager.persistAndFlush(contact_request));
+        Exception exception = assertThrows(ConstraintViolationException.class, () -> contactService.save(contact_request));
         assertThat(exception.getMessage()).contains("Email inválido");
     }
 
@@ -51,8 +56,7 @@ public class ContactApiJpaTest {
     @Test
     public void saveFirstnameInvalidTestDeepTest() {
         Contact contact_request = new Contact("Da", "Quintero", "+57302336789", "dairo.test@gmail.com");
-        Contact contact_response = new Contact();
-        ConstraintViolationException exception = assertThrows(ConstraintViolationException.class, () -> entityManager.persistAndFlush(contact_request));
+        ConstraintViolationException exception = assertThrows(ConstraintViolationException.class, () -> contactService.save(contact_request));
         Set<ConstraintViolation<?>> constraintViolations = exception.getConstraintViolations();
         Set<String> messages = new HashSet<>(constraintViolations.size());
         messages.addAll(constraintViolations.stream()
@@ -68,7 +72,7 @@ public class ContactApiJpaTest {
     @Test
     public void saveFirstnameInvalidTestContainTest() {
         Contact contact_request = new Contact("Da", "Quintero", "+57302336789", "dairo.test@gmail.com");
-        ConstraintViolationException exception = assertThrows(ConstraintViolationException.class, () -> entityManager.persistAndFlush(contact_request));
+        ConstraintViolationException exception = assertThrows(ConstraintViolationException.class, () -> contactService.save(contact_request));
         assertTrue(exception.getMessage().contains("El nombre debe tener entre 3 y 30 caracteres"));
     }
 
@@ -77,10 +81,20 @@ public class ContactApiJpaTest {
     public void saveNumberInvalidTest() {
 
         Contact contact_request = new Contact("Dairo", "Quintero", "4566990", "dairo.test@gmail.com");
-        ConstraintViolationException exception = assertThrows(ConstraintViolationException.class, () -> entityManager.persistAndFlush(contact_request));
+        ConstraintViolationException exception = assertThrows(ConstraintViolationException.class, () -> contactService.save(contact_request));
         Set<ConstraintViolation<?>> constraintViolations = exception.getConstraintViolations();
         Set<String> messages = new HashSet<>(constraintViolations.size());
         messages.addAll(constraintViolations.stream().map(constraintViolation -> String.format("%s", constraintViolation.getMessage())).collect(Collectors.toList()));
         assertEquals("El número de telefono sólo puede tener dígitos iniciando con el símbolo +", messages.iterator().next());
     }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @Test
+    public void saveTestCorrectServiceExample() {
+        Contact contact_request = new Contact("Dairo", "Quintero", "+57302336789", "dairo.test@gmail.com");
+        Contact contact_response = contactService.save(contact_request);
+        assertThat(contact_response.getId()).isNotNull();
+    }
+
 }
+

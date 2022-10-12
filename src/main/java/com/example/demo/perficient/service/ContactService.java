@@ -10,21 +10,25 @@ import com.example.demo.perficient.dto.Contact;
 
 @Service
 public class ContactService {
-    
-    @Autowired
+
     ContactRepository dao;
-     
-    
-    public Contact save(Contact contact){
-        //return dao.saveAndFlush( new Contact("Pedro" , "Fredy", "+455667", "emailtest.com"));
+
+    @Autowired
+    public ContactService(ContactRepository contactRepository) {
+        this.dao = contactRepository;
+    }
+
+
+    public Contact save(Contact contact) {
+
         return dao.saveAndFlush(contact);
     }
-    
-    public Contact getById(Contact contact){
+
+    public Contact getById(Contact contact) {
         return dao.getReferenceById(contact.getId());
     }
-    
-    public List<Contact> getByName(Contact contact){
+
+    public List<Contact> getByName(Contact contact) {
         return dao.findByFirstName(contact.getFirstName());
     }
 }

@@ -18,23 +18,23 @@ public class Contact {
 	@Id
 	@GeneratedValue
 	Long id;
-	
+
 	@NotNull
 	@NotBlank(message = "first name is required")
-	@Size(min=3, max=30, message="El nombre debe tener entre {min} y {max} caracteres")
+	@Size(min = 3, max = 30, message = "El nombre debe tener entre {min} y {max} caracteres")
 	String firstName;
-	
+
 	String lastName;
-	
-	@Pattern(regexp="^\\+[0-9]*$", message="El número de telefono sólo puede tener dígitos iniciando con el símbolo +")
+
+	@Pattern(regexp = "^\\+[0-9]*$", message = "El número de telefono sólo puede tener dígitos iniciando con el símbolo +")
 	String phoneNumber;
-	
-	@Email(message ="Email inválido")
+
+	@Email(message = "Email inválido")
 	String email;
-	
-	public Contact(){
+
+	public Contact() {
 		super();
-		}
+	}
 
 	public Contact(long l, String firstName, String lastName, String phoneNumber, String email) {
 		setId(l);
@@ -44,11 +44,19 @@ public class Contact {
 		setEmail(email);
 	}
 
-	public Contact( String firstName, String lastName, String phoneNumber, String email) {
+	public Contact(String firstName, String lastName, String phoneNumber, String email) {
 		setFirstName(firstName);
 		setLastName(lastName);
 		setPhoneNumber(phoneNumber);
 		setEmail(email);
+	}
+
+	public Contact(long l) {
+		setId(l);
+	}
+
+	public Contact(String firstName) {
+		setFirstName(firstName);
 	}
 
 	public Long getId() {

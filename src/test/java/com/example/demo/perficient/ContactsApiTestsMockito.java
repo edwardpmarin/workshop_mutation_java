@@ -21,32 +21,31 @@ import java.util.Random;
 @SpringBootTest
 class ContactsApiTestsMockito {
 
-	@InjectMocks
-	private ContactsApi contactController;
+    @InjectMocks
+    private ContactsApi contactController;
 
-	@Mock
-	private ContactService contactRepository;
+    @Mock
+    private ContactService contactService;
 
-	@Before
-	public void init() {
-		MockitoAnnotations.openMocks(this);
-	}
+    @Before
+    public void init() {
+        MockitoAnnotations.openMocks(this);
+    }
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {
+    }
 
-	@Test
-	public void testSaveContact() {
-		Random randomNumberMock = Mockito.mock(Random.class);
-		Contact contact_response = new Contact(1L, "Dairo", "Quintero", "", "dairo.ead@mail.com");
-		Contact contact_request = new Contact("Dairo", "Quintero", "+5674667", "testmario@gmail.com");
-		when(contactRepository.save(any(Contact.class))).thenReturn(contact_response);
-		Contact contact_validate = contactController.save(contact_request);
-		//revisar
-		verify(contactRepository).save(contact_request);
-		Assert.notNull(contact_validate.getId());
-		assertEquals(contact_response, contact_validate);
+    @Test
+    public void testSaveContact() {
+        Contact contact_response = new Contact(1L, "Dairo", "Quintero", "", "dairo.ead@mail.com");
+        Contact contact_request = new Contact("Dairo", "Quintero", "+5674667", "testmario@gmail.com");
+        when(contactService.save(any(Contact.class))).thenReturn(contact_response);
+        Contact contact_validate = contactController.save(contact_request);
+        //revisar
+        verify(contactService).save(contact_request);
+        Assert.notNull(contact_validate.getId());
+        assertEquals(contact_response, contact_validate);
 
-	}
+    }
 }
