@@ -88,13 +88,5 @@ public class ContactApiJpaTest {
         assertEquals("El número de telefono sólo puede tener dígitos iniciando con el símbolo +", messages.iterator().next());
     }
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    @Test
-    public void saveTestCorrectServiceExample() {
-        Contact contact_request = new Contact("Dairo", "Quintero", "+57302336789", "dairo.test@gmail.com");
-        Contact contact_response = contactService.save(contact_request);
-        assertThat(contact_response.getId()).isNotNull();
-    }
-
 }
 
