@@ -9,10 +9,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.web.JsonPath;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -32,11 +36,14 @@ public class ContactControllerMvcTest {
 
     @Test
     void whenValidInput_thenReturns200() throws Exception {
+        when(contactService.save(any(Contact.class)))
+                .thenReturn(new Contact(1,"Dairo", "Quintero", "+57302336789", "dairo.test@gmail.com"));
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/contact")
                         .contentType("application/json")
                         .content(asJsonString(new Contact("Dairo", "Quintero", "+57302336789", "dairo.test@gmail.com"))))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber());
     }
 
     @Test
@@ -78,7 +85,7 @@ public class ContactControllerMvcTest {
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/contact/name")
                         .contentType("application/json")
-                        .content(asJsonString(null)))
+                        .content(asJsonString(new Contact(567) )))
                 .andExpect(status().isBadRequest());
     }
 
