@@ -37,7 +37,7 @@ public class ContactControllerMvcTest {
     @Test
     void whenValidInput_thenReturns200() throws Exception {
         when(contactService.save(any(Contact.class)))
-                .thenReturn(new Contact(1,"Dairo", "Quintero", "+57302336789", "dairo.test@gmail.com"));
+                .thenReturn(new Contact(1, "Dairo", "Quintero", "+57302336789", "dairo.test@gmail.com"));
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/contact")
                         .contentType("application/json")
@@ -72,7 +72,6 @@ public class ContactControllerMvcTest {
 
     @Test
     void whenValidEmail_GetByid() throws Exception {
-
         mockMvc.perform(get("/contact/id")
                         .contentType("application/json")
                         .content(asJsonString(new Contact(5))))
@@ -81,23 +80,31 @@ public class ContactControllerMvcTest {
 
     @Test
     void whenGetByNameBodyNull() throws Exception {
-
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/contact/name")
                         .contentType("application/json")
-                        .content(asJsonString(new Contact(567) )))
+                        .content(asJsonString(null)))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     void whenGetByIdBodyNull() throws Exception {
-
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/contact/id")
                         .contentType("application/json")
                         .content(asJsonString(null)))
                 .andExpect(status().isBadRequest());
     }
+
+//Review test , real test return 500
+//    @Test
+//    void whenGetByIdLookForFirstNameReturns500() throws Exception {
+//        mockMvc.perform(MockMvcRequestBuilders
+//                        .get("/contact/id")
+//                        .contentType("application/json")
+//                        .content(asJsonString(new Contact())))
+//                .andExpect(status().isBadRequest());
+//    }
 
     public static String asJsonString(final Object obj) {
         try {
