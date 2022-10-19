@@ -43,6 +43,7 @@ public class ContactDataJpaShould {
         Contact contact_request = new Contact("Dairo", "Quintero", "+57302336789", "dairo.test@gmail.com");
         Contact contact_response = contactService.save(contact_request);
         assertThat(contact_response.getId()).isNotNull();
+        assertThat(contact_response.getLastName()).isNotNull();
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
