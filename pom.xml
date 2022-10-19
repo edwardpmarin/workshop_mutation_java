@@ -97,10 +97,6 @@
           <targetTests>
             <param>com.example.demo.perficient.*</param>
           </targetTests>
-          <avoidCallsTo>
-            <avoidCallsTo>org.codehaus.groovy.reflection.CachedClass</avoidCallsTo>
-            <avoidCallsTo>org.slf4j</avoidCallsTo>
-          </avoidCallsTo>
           <reportsDirectory>${project.build.directory}/pit-reports</reportsDirectory>
           <outputFormats>
             <outputFormat>HTML</outputFormat>
