@@ -1,5 +1,5 @@
 # workshop_mutation_java
-Repositorio para el workshop en la universidad del Quindío
+Repository for the Mutation Testing workshop
 
 ### Unit tests
 
